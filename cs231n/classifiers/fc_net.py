@@ -112,6 +112,7 @@ class TwoLayerNet(object):
         grads['b2'] = db2
         dx1, dw1, db1 = affine_relu_backward(d1_out, layer1_cache)
         grads['W1'] = dw1 + self.reg * self.params['W1']
+        grads['b1']=db1
 
         ############################################################################
         #                             END OF YOUR CODE                             #
@@ -178,7 +179,7 @@ class FullyConnectedNet(object):
         # beta2, etc. Scale parameters should be initialized to one and shift      #
         # parameters should be initialized to zero.                                #
         ############################################################################
-        pass
+        
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################
