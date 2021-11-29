@@ -120,7 +120,7 @@ class TwoLayerNet(object):
 
         return loss, grads
 
-
+#自定义一个fc网络
 class FullyConnectedNet(object):
     """
     A fully-connected neural network with an arbitrary number of hidden layers,
@@ -179,7 +179,11 @@ class FullyConnectedNet(object):
         # beta2, etc. Scale parameters should be initialized to one and shift      #
         # parameters should be initialized to zero.                                #
         ############################################################################
-        
+        dims=[input_dim]+hidden_dims+[num_classes]
+        for i in range(self.num_layers):
+            self.params[f'W{i+1}']=np.random.normal(scale=weight_scale,size=(dims[i],dims[i+1]))
+            self.params[f'b{i+1}']=np.zeros(dims+[i+1])
+            
         ############################################################################
         #                             END OF YOUR CODE                             #
         ############################################################################

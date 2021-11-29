@@ -16,15 +16,18 @@ class Solver(object):
     A Solver encapsulates all the logic necessary for training classification
     models. The Solver performs stochastic gradient descent using different
     update rules defined in optim.py.
+    Solver函数将需要用于训练分类器模型的所有部分封装起来，并使用了不同的优化方法
 
     The solver accepts both training and validataion data and labels so it can
     periodically check classification accuracy on both training and validation
     data to watch out for overfitting.
+    输入数据同时包括了，训练以及验证集合，以及标注，可以观测准确率以及防止过拟合
 
     To train a model, you will first construct a Solver instance, passing the
     model, dataset, and various optoins (learning rate, batch size, etc) to the
     constructor. You will then call the train() method to run the optimization
     procedure and train the model.
+    为了训练模型，要先构建一个Slover的实例，传入模型，参数，以及各种选项（比如学    习率，以及集合大小等等）
 
     After the train() method returns, model.params will contain the parameters
     that performed best on the validation set over the course of training.
@@ -57,15 +60,18 @@ class Solver(object):
 
     - model.params must be a dictionary mapping string parameter names to numpy
       arrays containing parameter values.
+      #参数值
 
     - model.loss(X, y) must be a function that computes training-time loss and
       gradients, and test-time classification scores, with the following inputs
       and outputs:
+      #损失函数
 
       Inputs:
       - X: Array giving a minibatch of input data of shape (N, d_1, ..., d_k)
       - y: Array of labels, of shape (N,) giving labels for X where y[i] is the
         label for X[i].
+      输入：数据集X，标签集y
 
       Returns:
       If y is None, run a test-time forward pass and return:
@@ -82,8 +88,10 @@ class Solver(object):
     def __init__(self, model, data, **kwargs):
         """
         Construct a new Solver instance.
+       构建一个新的slover实例
 
         Required arguments:
+        需要的参数有model和data
         - model: A model object conforming to the API described above
         - data: A dictionary of training and validation data containing:
           'X_train': Array, shape (N_train, d_1, ..., d_k) of training images
@@ -92,27 +100,37 @@ class Solver(object):
           'y_val': Array, shape (N_val,) of labels for validation images
 
         Optional arguments:
+        可选择的参数
         - update_rule: A string giving the name of an update rule in optim.py.
           Default is 'sgd'.
+          更新规则，一般是指优化的防止过拟合的算法，默认的为sgd
         - optim_config: A dictionary containing hyperparameters that will be
-          passed to the chosen update rule. Each update rule requires different
+          passed to the chosen update rule. Each update rule requires different    对应更新规则的参数
           hyperparameters (see optim.py) but all update rules require a
           'learning_rate' parameter so that should always be present.
         - lr_decay: A scalar for learning rate decay; after each epoch the
           learning rate is multiplied by this value.
+          学习率衰减，每过一个epoch（前向+后向）的过程之后，都将学习率乘上这个衰减
         - batch_size: Size of minibatches used to compute loss and gradient
           during training.
+          训练样本数量
         - num_epochs: The number of epochs to run for during training.
+        做多少此epochs
         - print_every: Integer; training losses will be printed every
           print_every iterations.
+          每经过多少次迭代之后，输入相应的训练损失
         - verbose: Boolean; if set to false then no output will be printed
           during training.
+          verbose，如果被设置为假，不会有输出
         - num_train_samples: Number of training samples used to check training
           accuracy; default is 1000; set to None to use entire training set.
+          用于测试训练准确率的训练集书香
         - num_val_samples: Number of validation samples to use to check val
           accuracy; default is None, which uses the entire validation set.
+          用于测试验证集的数量
         - checkpoint_name: If not None, then save model checkpoints here every
           epoch.
+          是否保存节点
         """
         self.model = model
         self.X_train = data['X_train']
@@ -140,6 +158,7 @@ class Solver(object):
 
         # Make sure the update rule exists, then replace the string
         # name with the actual function
+        #要确保有更新规则
         if not hasattr(optim, self.update_rule):
             raise ValueError('Invalid update_rule "%s"' % self.update_rule)
         self.update_rule = getattr(optim, self.update_rule)
@@ -148,6 +167,7 @@ class Solver(object):
 
 
     def _reset(self):
+        #重置函数
         """
         Set up some book-keeping variables for optimization. Don't call this
         manually.
@@ -172,6 +192,7 @@ class Solver(object):
         Make a single gradient update. This is called by train() and should not
         be called manually.
         """
+        #构造一个训练数据mini数据集
         # Make a minibatch of training data
         num_train = self.X_train.shape[0]
         batch_mask = np.random.choice(num_train, self.batch_size)
@@ -179,10 +200,12 @@ class Solver(object):
         y_batch = self.y_train[batch_mask]
 
         # Compute loss and gradient
+        #计算损失以及梯度
         loss, grads = self.model.loss(X_batch, y_batch)
         self.loss_history.append(loss)
 
         # Perform a parameter update
+        #更新参数
         for p, w in self.model.params.items():
             dw = grads[p]
             config = self.optim_configs[p]
