@@ -2,6 +2,7 @@ from builtins import range
 import numpy as np
 
 
+#前向计算函数
 def affine_forward(x, w, b):
     """
     Computes the forward pass for an affine (fully-connected) layer.
@@ -10,6 +11,9 @@ def affine_forward(x, w, b):
     examples, where each example x[i] has shape (d_1, ..., d_k). We will
     reshape each input into a vector of dimension D = d_1 * ... * d_k, and
     then transform it to an output vector of dimension M.
+    每一个的形状为 N，d_1,d_2,...d_k,D=d1+d2+...dk
+    最终获得的评分为M维，wD*M x拉伸后是N*D
+    
 
     Inputs:
     - x: A numpy array containing input data, of shape (N, d_1, ..., d_k)
@@ -54,7 +58,7 @@ def affine_backward(dout, cache):
     x, w, b = cache
     dx, dw, db = None, None, None
     ###########################################################################
-    # TODO: Implement the affine backward pass.                               #
+    # TODO: Implement the affine backward pass.                     #
     ###########################################################################
     #反向梯度计算
     N=x.shape[0]
@@ -63,7 +67,7 @@ def affine_backward(dout, cache):
     dw=(x_reshape.T).dot(dout)
     db=np.sum(dout,axis=0)
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
     return dx, dw, db
 
@@ -311,7 +315,7 @@ def dropout_forward(x, dropout_param):
         #######################################################################
         # TODO: Implement the test phase forward pass for inverted dropout.   #
         #######################################################################
-        pass
+        
         #######################################################################
         #                            END OF YOUR CODE                         #
         #######################################################################
@@ -338,7 +342,7 @@ def dropout_backward(dout, cache):
         #######################################################################
         # TODO: Implement training phase backward pass for inverted dropout   #
         #######################################################################
-        pass
+        
         #######################################################################
         #                          END OF YOUR CODE                           #
         #######################################################################
